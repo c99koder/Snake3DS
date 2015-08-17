@@ -2,6 +2,8 @@
 
 Snake Game for Nintendo 3DS.
 
+Demo video: https://goo.gl/photos/Aq96NVfWakpr58XdA
+
 # License
 (C) 2003 Sam Steele
 
