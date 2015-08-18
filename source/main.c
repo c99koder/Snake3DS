@@ -25,7 +25,7 @@
 #define GREEN 10
 
 #define BOARD_X 38
-#define BOARD_Y 24
+#define BOARD_Y 25
 
 #define TOP 0xC4
 #define BOT 0xC4
@@ -96,8 +96,13 @@ void redraw() {
 	cputcxy(BOARD_X+1,BOARD_Y+2,BOT_RIGHT);
 	gotoxy(0, BOARD_Y + 3);
 	textcolor(WHITE);
-	cputs("SnakeGame v0.02\n(C) 2003 Sam Steele");
+	cputs("SnakeGame v0.02      (C) 2003 Sam Steele");
 }
+
+extern const u8 collect_bin[];
+extern const u32 collect_bin_size;
+extern const u8 gameover_bin[];
+extern const u32 gameover_bin_size;
 
 int main()
 {
@@ -118,6 +123,14 @@ int main()
 	
 	gfxInitDefault();
 	console = consoleInit(GFX_BOTTOM,NULL);
+	csndInit();
+
+	//Transfer the sound effects into RAM
+	u8 *collect = linearAlloc(collect_bin_size);
+	memcpy(collect, collect_bin, collect_bin_size);
+	
+	u8 *gameover = linearAlloc(gameover_bin_size);
+	memcpy(gameover, gameover_bin, gameover_bin_size);
 	
 	for(x=0;x<BOARD_X;++x) {
 		b1 = board[x];
@@ -164,6 +177,7 @@ int main()
 				board[x][y]=255;
 				textcolor(RED);
 				cputcxy(x+1, y+2, GEM);
+				csndPlaySound(0x08, SOUND_ONE_SHOT | SOUND_FORMAT_16BIT, 16000, 1.0, 0.0, (u32*)gameover, (u32*)gameover, gameover_bin_size);
 			}
 
 			//check collisions
@@ -184,6 +198,7 @@ int main()
 							if(b1[y]>0&&b1[y]!=255) b1[y]+=2;
 						}
 					}
+					csndPlaySound(0x08, SOUND_ONE_SHOT | SOUND_FORMAT_16BIT, 16000, 1.0, 0.0, (u32*)collect, (u32*)collect, collect_bin_size);
 				} else { //snake
 					slives--; 
 					ssize=3; 
@@ -201,6 +216,7 @@ int main()
 					board[x][y]=255;
 					textcolor(RED);
 					cputcxy(x+1, y+2, GEM);
+					csndPlaySound(0x08, SOUND_ONE_SHOT | SOUND_FORMAT_16BIT, 16000, 1.0, 0.0, (u32*)gameover, (u32*)gameover, gameover_bin_size);
 				}
 			}
 			if(slives<=0) dead=1;
@@ -281,5 +297,8 @@ int main()
 	}
 
 	gfxExit();
+	csndExit();
+	linearFree(collect);
+	linearFree(gameover);
 	return 0;
 }
