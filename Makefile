@@ -133,7 +133,7 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf
+	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(OUTPUT).cia $(OUTPUT).icn $(OUTPUT).bnr
 
 
 #---------------------------------------------------------------------------------
@@ -145,12 +145,22 @@ DEPENDS	:=	$(OFILES:.o=.d)
 # main targets
 #---------------------------------------------------------------------------------
 ifeq ($(strip $(NO_SMDH)),)
-$(OUTPUT).3dsx	:	$(OUTPUT).elf $(OUTPUT).smdh
+$(OUTPUT).3dsx	:	$(OUTPUT).elf $(OUTPUT).smdh $(OUTPUT).cia
 else
 $(OUTPUT).3dsx	:	$(OUTPUT).elf
 endif
 
 $(OUTPUT).elf	:	$(OFILES)
+
+$(OUTPUT).icn	:	$(APP_ICON)
+	@bannertool makesmdh -i "$(APP_ICON)" -o "$@" -s "$(APP_TITLE)" -l "$(APP_TITLE)" -p "$(APP_AUTHOR)"
+
+$(OUTPUT).bnr	:
+	@bannertool makebanner -i ../banner.png -a ../gameover.wav -o "$@"
+
+$(OUTPUT).cia	:	$(OUTPUT).elf $(OUTPUT).icn $(OUTPUT).bnr
+	@makerom -f cia -o "$@" -elf $(OUTPUT).elf -rsf $(OUTPUT).rsf -icon $(OUTPUT).icn -banner $(OUTPUT).bnr -exefslogo -ver 1000
+	@echo "built ... $(OUTPUT).cia"
 
 #---------------------------------------------------------------------------------
 # you need a rule like this for each extension you use as binary data

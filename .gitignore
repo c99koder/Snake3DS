@@ -2,3 +2,7 @@
 build/
 upload.sh
 *.elf
+*.cia
+*.bnr
+*.icn
+
