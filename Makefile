@@ -35,6 +35,7 @@ INCLUDES	:=	include
 APP_TITLE := Snake 3DS
 APP_DESCRIPTION := Snake game for Nintendo 3DS
 APP_AUTHOR := Sam Steele
+ICON := icon.png
 
 #---------------------------------------------------------------------------------
 # options for code generation
