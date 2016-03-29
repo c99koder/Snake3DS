@@ -2,9 +2,7 @@
 
 Snake Game for Nintendo 3DS.
 
-![Screenshot](https://www.dropbox.com/s/8lgmxcgho1txdom/Screenshot%202015-08-18%2012.13.29.png?dl=1)
-
-Demo video: https://goo.gl/photos/Aq96NVfWakpr58XdA
+![Screenshot](https://www.dropbox.com/s/z41i3sayyo6wqpb/snek.gif?dl=1)
 
 # License
 (C) 2003 Sam Steele
